@@ -12,6 +12,7 @@ type TransactionProducer struct {
 	pool        *TransactionPool
 	users       []string
 	isRunning   bool
+	numWorkers  int
 	mu          sync.Mutex
 	stopChannel chan bool
 }
@@ -28,6 +29,7 @@ func NewTransactionProducer(pool *TransactionPool) *TransactionProducer {
 		pool:        pool,
 		users:       users,
 		stopChannel: make(chan bool),
+		numWorkers:  5,
 	}
 }
 
@@ -42,7 +44,7 @@ func (tp *TransactionProducer) Start() {
 	tp.mu.Unlock()
 
 	var wg sync.WaitGroup
-	for range 5 { // 5 workers
+	for range tp.numWorkers {
 		go tp.produce(&wg)
 	}
 	wg.Wait()
@@ -58,7 +60,10 @@ func (tp *TransactionProducer) Stop() {
 	tp.isRunning = false
 	tp.mu.Unlock()
 
-	tp.stopChannel <- true
+	// forcing all consumers to stop
+	for range tp.numWorkers {
+		tp.stopChannel <- true
+	}
 }
 
 // produce generates random transactions at regular intervals

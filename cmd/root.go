@@ -33,9 +33,9 @@ func Execute() {
 	pool.Stop()
 
 	// Display final blockchain state
-	fmt.Printf("\nFinal blockchain state:\n")
+	fmt.Printf("\n\n-----------------\n\n-> Final blockchain state <-\n")
 	fmt.Printf("Number of blocks: %d\n", len(blockchain.Blocks))
-	fmt.Printf("Blockchain is valid: %t\n", blockchain.IsValid())
+	fmt.Printf("Blockchain is valid: %t\n\n-----------------\n\n", blockchain.IsValid())
 
 	// Display all blocks
 	for i, block := range blockchain.Blocks {

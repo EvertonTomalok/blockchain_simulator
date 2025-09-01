@@ -51,6 +51,7 @@ func (tp *TransactionPool) Stop() {
 
 	tp.stopChannel <- true
 	close(tp.txChannel)
+	time.Sleep(1 * time.Second) // gracefully stopping, waiting all go routines to finish their work
 }
 
 // AddTransaction adds a transaction to the pool
