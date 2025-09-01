@@ -37,14 +37,16 @@ This project demonstrates the core concepts of blockchain technology through a w
 ```
 blockchain_simulator/
 ├── main.go                 # Application entry point
-├── go.mod                  # Go module definition
-├── README.md              # This file
+├── go.mod                  # Go module definition and dependencies
+├── README.md              # Project documentation
+├── cmd/                   # Command-line interface and application logic
+│   └── root.go           # Main application execution logic
 └── internal/              # Core blockchain implementation
-    ├── block.go           # Block structure and operations
-    ├── blockchain.go      # Blockchain management
-    ├── tx.go              # Transaction structure and operations
-    ├── tx_pool.go         # Transaction pool and batching
-    └── tx_producer.go     # Transaction generation
+    ├── block.go           # Block structure, hashing, and block operations
+    ├── blockchain.go      # Blockchain management and validation
+    ├── tx.go              # Transaction structure and hash generation
+    ├── tx_pool.go         # Transaction pool, batching, and consumer logic
+    └── tx_producer.go     # Transaction generation with multiple workers
 ```
 
 ## Getting Started
@@ -85,7 +87,7 @@ The simulator runs automatically for 20 seconds and demonstrates:
 ### Transaction Producer Settings
 - **Workers**: 5 concurrent transaction generators
 - **Interval**: Random intervals between 400-800ms
-- **Users**: 8 simulated users (Alice, Bob, Charlie, etc.)
+- **Users**: 13 simulated users (Everton, Amanda, Marc, Mavie, etc.)
 - **Amount Range**: 0-100 random amounts
 
 ## Key Components
@@ -179,8 +181,8 @@ Potential improvements for this simulator:
 
 ## License
 
-This project is for educational purposes. Feel free to use and modify as needed.
+This project is for educational purposes and study case. Feel free to use and modify as needed.
 
 ## Contributing
 
-This is just a study case. Please feel free to submit pull requests or open issues for improvements and bug fixes.
+This is a study case project. Please feel free to submit pull requests or open issues for improvements and bug fixes.
