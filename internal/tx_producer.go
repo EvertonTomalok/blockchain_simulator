@@ -18,7 +18,11 @@ type TransactionProducer struct {
 
 // NewTransactionProducer creates a new transaction producer
 func NewTransactionProducer(pool *TransactionPool) *TransactionProducer {
-	users := []string{"Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Henry"}
+	users := []string{
+		"Everton", "Amanda", "Gabriel", "Marc", "Mavie",
+		"Alice", "Bob", "Charlie", "Diana", "Eve", "Frank",
+		"Grace", "Henry",
+	}
 
 	return &TransactionProducer{
 		pool:        pool,
