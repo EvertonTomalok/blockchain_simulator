@@ -10,7 +10,6 @@ import (
 // TransactionProducer generates random transactions
 type TransactionProducer struct {
 	pool        *TransactionPool
-	interval    time.Duration
 	users       []string
 	isRunning   bool
 	mu          sync.Mutex
@@ -18,12 +17,11 @@ type TransactionProducer struct {
 }
 
 // NewTransactionProducer creates a new transaction producer
-func NewTransactionProducer(pool *TransactionPool, intervalMs int) *TransactionProducer {
+func NewTransactionProducer(pool *TransactionPool) *TransactionProducer {
 	users := []string{"Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Henry"}
 
 	return &TransactionProducer{
 		pool:        pool,
-		interval:    time.Duration(intervalMs) * time.Millisecond,
 		users:       users,
 		stopChannel: make(chan bool),
 	}
@@ -39,7 +37,11 @@ func (tp *TransactionProducer) Start() {
 	tp.isRunning = true
 	tp.mu.Unlock()
 
-	go tp.produce()
+	var wg sync.WaitGroup
+	for range 5 { // 5 workers
+		go tp.produce(&wg)
+	}
+	wg.Wait()
 }
 
 // Stop stops producing transactions
@@ -56,8 +58,12 @@ func (tp *TransactionProducer) Stop() {
 }
 
 // produce generates random transactions at regular intervals
-func (tp *TransactionProducer) produce() {
-	ticker := time.NewTicker(tp.interval)
+func (tp *TransactionProducer) produce(wg *sync.WaitGroup) {
+	wg.Add(1)
+	defer wg.Done()
+
+	intervalMs := getRandomMs(400, 800)
+	ticker := time.NewTicker(time.Duration(intervalMs) * time.Millisecond)
 	defer ticker.Stop()
 
 	for {
@@ -82,4 +88,18 @@ func (tp *TransactionProducer) produce() {
 			return
 		}
 	}
+}
+
+func getRandomMs(min, max int) int {
+	rand.Seed(time.Now().Unix())
+	possibilities := make([]int, max-min)
+	for i := min; i < max; i++ {
+		possibilities = append(possibilities, i)
+	}
+	choice := possibilities[rand.Intn(len(possibilities))]
+
+	if choice < min {
+		return min
+	}
+	return choice
 }

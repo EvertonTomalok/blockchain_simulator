@@ -12,11 +12,11 @@ func main() {
 	blockchain := internal.NewBlockchain()
 	fmt.Println("Blockchain initialized with genesis block")
 
-	// Create transaction pool (batch size = 3 transactions)
-	pool := internal.NewTransactionPool(blockchain, 3)
+	// Create transaction pool (batch size = 10 transactions)
+	pool := internal.NewTransactionPool(blockchain, 10)
 
-	// Create transaction producer (generates transaction every 500ms)
-	producer := internal.NewTransactionProducer(pool, 500)
+	// Create transaction producer (generates transactions)
+	producer := internal.NewTransactionProducer(pool)
 
 	// Start the system
 	pool.Start()
