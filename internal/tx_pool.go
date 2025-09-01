@@ -98,6 +98,7 @@ func (tp *TransactionPool) consumer() {
 			}
 
 		case <-tp.stopChannel:
+			ticker.Stop()
 			// Process remaining batch before stopping
 			if len(batch) > 0 {
 				tp.createBlock(batch)

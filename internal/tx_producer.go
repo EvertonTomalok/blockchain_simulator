@@ -68,7 +68,6 @@ func (tp *TransactionProducer) produce(wg *sync.WaitGroup) {
 
 	intervalMs := getRandomMs(400, 800)
 	ticker := time.NewTicker(time.Duration(intervalMs) * time.Millisecond)
-	defer ticker.Stop()
 
 	for {
 		select {
@@ -89,6 +88,7 @@ func (tp *TransactionProducer) produce(wg *sync.WaitGroup) {
 			tp.pool.AddTransaction(tx)
 
 		case <-tp.stopChannel:
+			ticker.Stop()
 			return
 		}
 	}
